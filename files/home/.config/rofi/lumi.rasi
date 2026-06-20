@@ -1,0 +1,110 @@
+/* Rofi Theme - LumiDistro */
+configuration {
+    modi: "drun,run,window";
+    font: "Noto Sans 12";
+    show-icons: true;
+    icon-theme: "Papirus";
+    display-drun: "Applications";
+    display-run: "Exécuter";
+    display-window: "Fenêtres";
+    drun-display-format: "{name}";
+    location: 0;
+    width: 500;
+    lines: 8;
+    columns: 1;
+    line-margin: 5;
+    line-padding: 10;
+    padding: 20;
+    fixed-num-lines: true;
+    hide-scrollbar: true;
+    sidebar-mode: false;
+}
+
+* {
+    bg: rgba(30, 30, 46, 0.95);
+    bg-alt: rgba(49, 50, 68, 0.95);
+    fg: #cdd6f4;
+    fg-alt: #6c7086;
+    accent: #89b4fa;
+    urgent: #f38ba8;
+    border: rgba(137, 180, 250, 0.3);
+    selected: rgba(137, 180, 250, 0.2);
+}
+
+window {
+    background-color: @bg;
+    border: 2px;
+    border-color: @border;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+mainbox {
+    background-color: transparent;
+    children: [ inputbar, listview ];
+    spacing: 15px;
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border-radius: 10px;
+    padding: 10px 15px;
+    children: [ prompt, textbox-prompt-colon, entry ];
+}
+
+prompt {
+    background-color: transparent;
+    text-color: @accent;
+    font: "Font Awesome 6 Free Solid 14";
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: ":";
+    background-color: transparent;
+    text-color: @fg;
+}
+
+entry {
+    background-color: transparent;
+    text-color: @fg;
+    placeholder: "Rechercher...";
+    placeholder-color: @fg-alt;
+}
+
+listview {
+    background-color: transparent;
+    border: 0px;
+    padding: 0px;
+    scrollbar: false;
+}
+
+element {
+    background-color: transparent;
+    text-color: @fg;
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+element selected {
+    background-color: @selected;
+    text-color: @accent;
+}
+
+element normal urgent {
+    text-color: @urgent;
+}
+
+element selected urgent {
+    background-color: @selected;
+    text-color: @urgent;
+}
+
+element normal active {
+    text-color: @accent;
+}
+
+element selected active {
+    background-color: @selected;
+    text-color: @accent;
+}

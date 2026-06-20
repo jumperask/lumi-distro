@@ -1,0 +1,60 @@
+# Système de base
+linux-image-amd64
+grub-pc
+sudo
+wget
+curl
+git
+vim
+nano
+network-manager
+wireless-tools
+wpasupplicant
+firmware-iwlwifi
+firmware-linux-nonfree
+
+# Interface graphique légère
+sway
+waybar
+rofi
+alacritty
+light
+polkit
+xorg-server-xwayland
+
+# Thème et apparence
+gtk2-engines-pixbuf
+gtk3-engines-breeze
+qt5-style-plugins
+papirus-icon-theme
+fonts-noto
+fonts-font-awesome
+
+# Applications essentielles
+firefox-esr
+pcmanfm-qt
+lxqt-archiver
+geany
+mpv
+feh
+scrot
+blueman
+pavucontrol
+pulseaudio
+pulseaudio-utils
+
+# Utilitaires
+htop
+neofetch
+tree
+zip
+unzip
+p7zip
+rsync
+openssh-server
+ufw
+
+# Optimisation
+preload
+zram-tools
+tlp

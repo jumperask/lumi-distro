@@ -1,0 +1,121 @@
+/* Waybar Style - LumiDistro Theme */
+* {
+    font-family: "Noto Sans", "Font Awesome 6 Free", sans-serif;
+    font-size: 13px;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+window#waybar {
+    background: rgba(30, 30, 46, 0.9);
+    border-radius: 10px;
+    border: 1px solid rgba(137, 180, 250, 0.2);
+    color: #cdd6f4;
+}
+
+tooltip {
+    background: rgba(30, 30, 46, 0.95);
+    border: 1px solid rgba(137, 180, 250, 0.3);
+    border-radius: 8px;
+}
+
+tooltip label {
+    color: #cdd6f4;
+    padding: 5px;
+}
+
+#workspaces {
+    margin-left: 10px;
+}
+
+#workspaces button {
+    padding: 0 10px;
+    color: #6c7086;
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    margin: 0 2px;
+}
+
+#workspaces button:hover {
+    background: rgba(137, 180, 250, 0.2);
+    color: #cdd6f4;
+}
+
+#workspaces button.focused {
+    background: rgba(137, 180, 250, 0.3);
+    color: #89b4fa;
+    border: 1px solid rgba(137, 180, 250, 0.5);
+}
+
+#workspaces button.urgent {
+    color: #f38ba8;
+}
+
+#mode {
+    padding: 0 10px;
+    margin: 0 5px;
+    background: rgba(243, 139, 168, 0.2);
+    border-radius: 5px;
+    color: #f38ba8;
+}
+
+#window {
+    padding: 0 10px;
+    color: #cdd6f4;
+}
+
+#clock {
+    padding: 0 15px;
+    color: #89b4fa;
+    font-weight: bold;
+}
+
+#cpu {
+    padding: 0 10px;
+    color: #a6e3a1;
+}
+
+#memory {
+    padding: 0 10px;
+    color: #f9e2af;
+}
+
+#battery {
+    padding: 0 10px;
+}
+
+#battery.charging {
+    color: #a6e3a1;
+}
+
+#battery.warning:not(.charging) {
+    color: #f9e2af;
+}
+
+#battery.critical:not(.charging) {
+    color: #f38ba8;
+}
+
+#network {
+    padding: 0 10px;
+    color: #89b4fa;
+}
+
+#pulseaudio {
+    padding: 0 10px;
+    color: #cba6f7;
+}
+
+#tray {
+    margin-right: 10px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}

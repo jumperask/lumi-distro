@@ -1,0 +1,59 @@
+name: Build LumiDistro ISO
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y debootstrap xorriso grub-pc-bin grub-efi-amd64-bin mtools python3 python3-pip
+    
+    - name: Install Pillow
+      run: pip3 install Pillow
+    
+    - name: Make scripts executable
+      run: chmod +x *.sh *.py
+    
+    - name: Generate wallpaper
+      run: python3 generate-wallpaper.py
+    
+    - name: Build ISO
+      run: sudo ./create-iso.sh
+    
+    - name: Check ISO
+      run: |
+        if [ -f lumi-distro-1.0.iso ]; then
+          ls -lh lumi-distro-1.0.iso
+        else
+          echo "ISO not found!"
+          exit 1
+        fi
+    
+    - name: Upload ISO
+      uses: actions/upload-artifact@v3
+      with:
+        name: lumi-distro-iso
+        path: lumi-distro-1.0.iso
+        retention-days: 7
+    
+    - name: Create release info
+      run: |
+        echo "ISO Size: $(du -h lumi-distro-1.0.iso | cut -f1)" > release-info.txt
+        echo "Build Date: $(date)" >> release-info.txt
+        echo "Version: 1.0" >> release-info.txt
+    
+    - name: Upload release info
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-info
+        path: release-info.txt
