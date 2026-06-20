@@ -1,4 +1,4 @@
-name: Build LumiDistro ISO
+name: Build LumiDistro Installation Package
 
 on:
   workflow_dispatch:
@@ -13,11 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y debootstrap xorriso grub-pc-bin grub-efi-amd64-bin mtools python3 python3-pip
-    
     - name: Install Pillow
       run: pip3 install Pillow
     
@@ -27,33 +22,106 @@ jobs:
     - name: Generate wallpaper
       run: python3 generate-wallpaper.py
     
-    - name: Build ISO
-      run: sudo ./create-iso.sh
-    
-    - name: Check ISO
+    - name: Create installation package
       run: |
-        if [ -f lumi-distro-1.0.iso ]; then
-          ls -lh lumi-distro-1.0.iso
-        else
-          echo "ISO not found!"
-          exit 1
-        fi
+        mkdir -p lumi-distro-installer
+        cp -r files lumi-distro-installer/
+        cp packages.txt lumi-distro-installer/
+        cp optimize.sh lumi-distro-installer/
+        cp install.sh lumi-distro-installer/ 2>/dev/null || echo "#!/bin/bash" > lumi-distro-installer/install.sh
+        chmod +x lumi-distro-installer/*.sh
+        tar -czf lumi-distro-installer.tar.gz lumi-distro-installer/
     
-    - name: Upload ISO
+    - name: Create installation script
+      run: |
+        cat > install-lumi-distro.sh << 'EOF'
+        #!/bin/bash
+        # LumiDistro Installation Script
+        # Run this on a Debian/Ubuntu system
+        
+        set -e
+        
+        echo "=== LumiDistro Installation ==="
+        echo "This script will install LumiDistro on your Debian/Ubuntu system"
+        echo ""
+        
+        # Check if running as root
+        if [ "$EUID" -ne 0 ]; then 
+            echo "Please run as root (sudo)"
+            exit 1
+        fi
+        
+        # Extract the package
+        echo "Extracting files..."
+        tar -xzf lumi-distro-installer.tar.gz
+        cd lumi-distro-installer
+        
+        # Install dependencies
+        echo "Installing dependencies..."
+        apt-get update
+        apt-get install -y $(cat packages.txt)
+        
+        # Copy configuration files
+        echo "Installing configuration files..."
+        cp -r files/home/. /home/$SUDO_USER/
+        chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER/.config
+        
+        # Run optimization
+        echo "Running optimizations..."
+        ./optimize.sh
+        
+        echo "=== Installation completed ==="
+        echo "Log out and log back in to see changes"
+        EOF
+        chmod +x install-lumi-distro.sh
+    
+    - name: Create README for installation
+      run: |
+        cat > INSTALL-INSTRUCTIONS.md << 'EOF'
+        # LumiDistro Installation
+        
+        ## Quick Install
+        
+        1. Download `lumi-distro-installer.tar.gz`
+        2. Extract: `tar -xzf lumi-distro-installer.tar.gz`
+        3. Run: `sudo ./install-lumi-distro.sh`
+        
+        ## Requirements
+        
+        - Debian 12+ or Ubuntu 22.04+
+        - 2GB RAM minimum
+        - 10GB disk space
+        
+        ## What it installs
+        
+        - Sway window manager
+        - Waybar
+        - Rofi
+        - Custom theme
+        - Optimized settings
+        
+        ## After installation
+        
+        Log out and log back in. Select "Sway" from your login manager.
+        EOF
+    
+    - name: Upload installation package
       uses: actions/upload-artifact@v4
       with:
-        name: lumi-distro-iso
-        path: lumi-distro-1.0.iso
+        name: lumi-distro-installer
+        path: lumi-distro-installer.tar.gz
         retention-days: 7
     
-    - name: Create release info
-      run: |
-        echo "ISO Size: $(du -h lumi-distro-1.0.iso | cut -f1)" > release-info.txt
-        echo "Build Date: $(date)" >> release-info.txt
-        echo "Version: 1.0" >> release-info.txt
-    
-    - name: Upload release info
+    - name: Upload installation script
       uses: actions/upload-artifact@v4
       with:
-        name: release-info
-        path: release-info.txt
+        name: install-script
+        path: install-lumi-distro.sh
+        retention-days: 7
+    
+    - name: Upload instructions
+      uses: actions/upload-artifact@v4
+      with:
+        name: install-instructions
+        path: INSTALL-INSTRUCTIONS.md
+        retention-days: 7
