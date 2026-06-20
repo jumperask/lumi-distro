@@ -11,7 +11,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Install dependencies
       run: |
@@ -40,7 +40,7 @@ jobs:
         fi
     
     - name: Upload ISO
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: lumi-distro-iso
         path: lumi-distro-1.0.iso
@@ -53,7 +53,7 @@ jobs:
         echo "Version: 1.0" >> release-info.txt
     
     - name: Upload release info
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-info
         path: release-info.txt
